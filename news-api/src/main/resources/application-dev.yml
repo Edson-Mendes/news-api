@@ -1,0 +1,14 @@
+
+# datasource properties
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/news-api-db
+    username: user
+    password: 1234
+
+# jpa properties
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: true

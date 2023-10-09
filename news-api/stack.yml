@@ -1,0 +1,18 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    container_name: news-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: news-api-db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: 1234
+    volumes:
+      - news-volume:/var/lib/postgresql/data
+
+volumes:
+  news-volume:
