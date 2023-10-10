@@ -25,6 +25,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserSummaryResponse register(CreateUserRequest userRequest) {
+    // TODO: verificar se password e confirmPassword correspondem.
     User user = userMapper.toUser(userRequest);
 
     user.setCreatedAt(LocalDateTime.now());
