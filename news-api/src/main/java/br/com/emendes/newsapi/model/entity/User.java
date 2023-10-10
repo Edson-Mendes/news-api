@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Classe que representa a entidade t_user do banco de dados.
@@ -41,4 +42,14 @@ public class User {
   )
   private Collection<Authority> authorities;
 
+  /**
+   * Adiciona authority a collections authorities.
+   *
+   * @param authority Authority a ser adicinada.
+   */
+  public void addAuthority(Authority authority) {
+    if (authorities == null) {
+      authorities = new HashSet<>();
+    }
+  }
 }

@@ -8,7 +8,7 @@ import lombok.*;
  */
 @Entity
 @Table(name = "t_authority")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -18,7 +18,6 @@ public class Authority {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @EqualsAndHashCode.Include
   private Integer id;
   @Column(length = 50, nullable = false, unique = true)
   private String name;
