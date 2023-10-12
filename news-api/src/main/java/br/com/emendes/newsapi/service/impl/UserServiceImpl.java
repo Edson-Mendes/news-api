@@ -42,14 +42,12 @@ public class UserServiceImpl implements UserService {
     user.addAuthority(USER_AUTHORITY);
     user.setPassword(passwordEncoder.encode(userRequest.password()));
 
-    // TODO: tratar constraint exception (unique email).
-    userRepository.save(user);
-    // TODO: Enviar email de registro de conta para o email informado.
 
     try {
       userRepository.save(user);
       log.info("User saved successfully with id : {}", user.getId());
 
+      // TODO: Enviar email de registro de conta para o email informado.
       return userMapper.toUserSummaryResponse(user);
     } catch (DataIntegrityViolationException exception) {
       log.info("Data Integrity Violation, message : {}", exception.getMessage());
