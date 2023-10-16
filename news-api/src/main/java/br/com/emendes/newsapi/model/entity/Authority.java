@@ -2,6 +2,7 @@ package br.com.emendes.newsapi.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
 
 /**
  * Classe que representa a entidade t_authority do banco de dados.
@@ -14,7 +15,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class Authority {
+public class Authority implements GrantedAuthority {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +23,8 @@ public class Authority {
   @Column(length = 50, nullable = false, unique = true)
   private String name;
 
+  @Override
+  public String getAuthority() {
+    return this.name;
+  }
 }
