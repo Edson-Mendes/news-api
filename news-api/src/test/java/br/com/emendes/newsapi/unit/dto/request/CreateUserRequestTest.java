@@ -1,6 +1,7 @@
 package br.com.emendes.newsapi.unit.dto.request;
 
 import br.com.emendes.newsapi.dto.request.CreateUserRequest;
+import br.com.emendes.newsapi.util.ViolationMessageUtil;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -15,19 +16,17 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.List;
 import java.util.Set;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Unit tests for CreateUserRequest")
 class CreateUserRequestTest {
 
-  private static final ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
   private Validator validator;
+  private final ViolationMessageUtil<CreateUserRequest> violationMessageUtil = new ViolationMessageUtil<>();
 
-  @BeforeEach
+  @BeforeAll
   void setUp() {
+    ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
     validator = validatorFactory.getValidator();
-  }
-
-  @AfterAll
-  static void afterAll() {
     validatorFactory.close();
   }
 
@@ -62,7 +61,7 @@ class CreateUserRequestTest {
 
       Set<ConstraintViolation<CreateUserRequest>> actualViolations = validator
           .validateProperty(createUserRequest, PROPERTY_NAME);
-      List<String> actualViolationMessages = getViolationMessages(actualViolations);
+      List<String> actualViolationMessages = violationMessageUtil.getViolationMessages(actualViolations);
 
       Assertions.assertThat(actualViolations).isNotNull().isNotEmpty();
       Assertions.assertThat(actualViolationMessages).isNotEmpty().contains("name must not be blank");
@@ -81,7 +80,7 @@ class CreateUserRequestTest {
 
       Set<ConstraintViolation<CreateUserRequest>> actualViolations = validator
           .validateProperty(createUserRequest, PROPERTY_NAME);
-      List<String> actualViolationMessages = getViolationMessages(actualViolations);
+      List<String> actualViolationMessages = violationMessageUtil.getViolationMessages(actualViolations);
 
       Assertions.assertThat(actualViolations).isNotNull().isNotEmpty();
       Assertions.assertThat(actualViolationMessages).isNotEmpty()
@@ -101,7 +100,7 @@ class CreateUserRequestTest {
 
       Set<ConstraintViolation<CreateUserRequest>> actualViolations = validator
           .validateProperty(createUserRequest, PROPERTY_NAME);
-      List<String> actualViolationMessages = getViolationMessages(actualViolations);
+      List<String> actualViolationMessages = violationMessageUtil.getViolationMessages(actualViolations);
 
       Assertions.assertThat(actualViolations).isNotNull().isNotEmpty();
       Assertions.assertThat(actualViolationMessages).isNotEmpty()
@@ -141,7 +140,7 @@ class CreateUserRequestTest {
 
       Set<ConstraintViolation<CreateUserRequest>> actualViolations = validator
           .validateProperty(createUserRequest, PROPERTY_EMAIL);
-      List<String> actualViolationMessages = getViolationMessages(actualViolations);
+      List<String> actualViolationMessages = violationMessageUtil.getViolationMessages(actualViolations);
 
       Assertions.assertThat(actualViolations).isNotNull().isNotEmpty();
       Assertions.assertThat(actualViolationMessages).isNotEmpty().contains("email must not be blank");
@@ -163,7 +162,7 @@ class CreateUserRequestTest {
 
       Set<ConstraintViolation<CreateUserRequest>> actualViolations = validator
           .validateProperty(createUserRequest, PROPERTY_EMAIL);
-      List<String> actualViolationMessages = getViolationMessages(actualViolations);
+      List<String> actualViolationMessages = violationMessageUtil.getViolationMessages(actualViolations);
 
       Assertions.assertThat(actualViolations).isNotNull().isNotEmpty();
       Assertions.assertThat(actualViolationMessages).isNotEmpty()
@@ -191,7 +190,7 @@ class CreateUserRequestTest {
           .validateProperty(createUserRequest, PROPERTY_EMAIL);
 
       Assertions.assertThat(actualViolations).isNotNull().isNotEmpty();
-      List<String> actualViolationMessages = getViolationMessages(actualViolations);
+      List<String> actualViolationMessages = violationMessageUtil.getViolationMessages(actualViolations);
 
       Assertions.assertThat(actualViolations).isNotNull().isNotEmpty();
       Assertions.assertThat(actualViolationMessages).isNotEmpty()
@@ -231,7 +230,7 @@ class CreateUserRequestTest {
 
       Set<ConstraintViolation<CreateUserRequest>> actualViolations = validator
           .validateProperty(createUserRequest, PROPERTY_PASSWORD);
-      List<String> actualViolationMessages = getViolationMessages(actualViolations);
+      List<String> actualViolationMessages = violationMessageUtil.getViolationMessages(actualViolations);
 
       Assertions.assertThat(actualViolations).isNotNull().isNotEmpty();
       Assertions.assertThat(actualViolationMessages).isNotEmpty().contains("password must not be blank");
@@ -250,7 +249,7 @@ class CreateUserRequestTest {
 
       Set<ConstraintViolation<CreateUserRequest>> actualViolations = validator
           .validateProperty(createUserRequest, PROPERTY_PASSWORD);
-      List<String> actualViolationMessages = getViolationMessages(actualViolations);
+      List<String> actualViolationMessages = violationMessageUtil.getViolationMessages(actualViolations);
 
       Assertions.assertThat(actualViolations).isNotNull().isNotEmpty();
       Assertions.assertThat(actualViolationMessages).isNotEmpty()
@@ -270,7 +269,7 @@ class CreateUserRequestTest {
 
       Set<ConstraintViolation<CreateUserRequest>> actualViolations = validator
           .validateProperty(createUserRequest, PROPERTY_PASSWORD);
-      List<String> actualViolationMessages = getViolationMessages(actualViolations);
+      List<String> actualViolationMessages = violationMessageUtil.getViolationMessages(actualViolations);
 
       Assertions.assertThat(actualViolations).isNotNull().isNotEmpty();
       Assertions.assertThat(actualViolationMessages).isNotEmpty()
@@ -310,16 +309,12 @@ class CreateUserRequestTest {
 
       Set<ConstraintViolation<CreateUserRequest>> actualViolations = validator
           .validateProperty(createUserRequest, PROPERTY_CONFIRM_PASSWORD);
-      List<String> actualViolationMessages = getViolationMessages(actualViolations);
+      List<String> actualViolationMessages = violationMessageUtil.getViolationMessages(actualViolations);
 
       Assertions.assertThat(actualViolations).isNotNull().isNotEmpty();
       Assertions.assertThat(actualViolationMessages).isNotEmpty().contains("confirmPassword must not be blank");
     }
 
-  }
-
-  private static List<String> getViolationMessages(Set<ConstraintViolation<CreateUserRequest>> actualViolations) {
-    return actualViolations.stream().map(ConstraintViolation::getMessage).toList();
   }
 
 }

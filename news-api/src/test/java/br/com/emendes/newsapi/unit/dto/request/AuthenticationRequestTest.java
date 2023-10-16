@@ -1,12 +1,16 @@
 package br.com.emendes.newsapi.unit.dto.request;
 
 import br.com.emendes.newsapi.dto.request.AuthenticationRequest;
+import br.com.emendes.newsapi.util.ViolationMessageUtil;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -20,16 +24,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Unit tests for AuthenticationRequest")
 class AuthenticationRequestTest {
 
-  private static final ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
   private Validator validator;
+  private final ViolationMessageUtil<AuthenticationRequest> violationMessageUtil = new ViolationMessageUtil<>();
 
   @BeforeAll
   void setUp() {
+    ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
     validator = validatorFactory.getValidator();
-  }
-
-  @AfterAll
-  void afterAll() {
     validatorFactory.close();
   }
 
@@ -60,7 +61,7 @@ class AuthenticationRequestTest {
 
       Set<ConstraintViolation<AuthenticationRequest>> actualViolations = validator
           .validateProperty(authenticationRequest, PROPERTY_USERNAME);
-      List<String> actualViolationMessages = getViolationMessages(actualViolations);
+      List<String> actualViolationMessages = violationMessageUtil.getViolationMessages(actualViolations);
 
       assertThat(actualViolations).isNotNull().isNotEmpty();
       Assertions.assertThat(actualViolationMessages).isNotEmpty().contains("username must not be blank");
@@ -95,16 +96,12 @@ class AuthenticationRequestTest {
 
       Set<ConstraintViolation<AuthenticationRequest>> actualViolations = validator
           .validateProperty(authenticationRequest, PROPERTY_PASSWORD);
-      List<String> actualViolationMessages = getViolationMessages(actualViolations);
+      List<String> actualViolationMessages = violationMessageUtil.getViolationMessages(actualViolations);
 
       assertThat(actualViolations).isNotNull().isNotEmpty();
       Assertions.assertThat(actualViolationMessages).isNotEmpty().contains("password must not be blank");
     }
 
-  }
-
-  private static List<String> getViolationMessages(Set<ConstraintViolation<AuthenticationRequest>> actualViolations) {
-    return actualViolations.stream().map(ConstraintViolation::getMessage).toList();
   }
 
 }
