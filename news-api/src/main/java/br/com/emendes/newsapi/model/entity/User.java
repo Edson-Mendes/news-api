@@ -53,11 +53,13 @@ public class User implements UserDetails {
     if (authorities == null) {
       authorities = new HashSet<>();
     }
+
+    authorities.add(authority);
   }
 
   @Override
   public String getUsername() {
-    return null;
+    return this.email;
   }
 
   @Override
@@ -72,17 +74,17 @@ public class User implements UserDetails {
 
   @Override
   public boolean isAccountNonExpired() {
-    return false;
+    return true;
   }
 
   @Override
   public boolean isAccountNonLocked() {
-    return false;
+    return this.enabled;
   }
 
   @Override
   public boolean isCredentialsNonExpired() {
-    return false;
+    return true;
   }
 
 }

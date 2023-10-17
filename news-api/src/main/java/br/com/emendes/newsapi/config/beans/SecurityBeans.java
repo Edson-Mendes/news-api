@@ -49,7 +49,12 @@ public class SecurityBeans {
       log.info("Searching for user with email : {}", username);
 
       return userRepository.findByEmailAndEnabledTrue(username)
-          .orElseThrow(() -> new UsernameNotFoundException(String.format("User %s not found", username)));
+          .orElseThrow(() -> {
+            String message = String.format("User %s not found", username);
+
+            log.info(message);
+            return new UsernameNotFoundException(message);
+          });
     };
   }
 
