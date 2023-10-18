@@ -32,6 +32,8 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
    * @return {@code Optional<Authentication>} podendo conter um {@link Authentication}.
    */
   private Optional<Authentication> getAuthentication() {
+    // FIXME: Nunca retornará um empty optional.
+    // Caso não tenha usuário logado retornará anonymousUser.
     return Optional.of(SecurityContextHolder.getContext().getAuthentication());
   }
 
