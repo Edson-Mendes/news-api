@@ -3,6 +3,7 @@ package br.com.emendes.newsapi.controller;
 import br.com.emendes.newsapi.dto.request.CreateNewsRequest;
 import br.com.emendes.newsapi.dto.response.NewsSummaryResponse;
 import br.com.emendes.newsapi.service.NewsService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +29,7 @@ public class NewsController {
    */
   @PostMapping
   public ResponseEntity<NewsSummaryResponse> register(
-      @RequestBody CreateNewsRequest createNewsRequest, UriComponentsBuilder uriBuilder) {
+      @RequestBody @Valid CreateNewsRequest createNewsRequest, UriComponentsBuilder uriBuilder) {
     NewsSummaryResponse newsSummaryResponse = newsService.register(createNewsRequest);
 
     URI location = uriBuilder.path("/api/news/{id}").build(newsSummaryResponse.id());

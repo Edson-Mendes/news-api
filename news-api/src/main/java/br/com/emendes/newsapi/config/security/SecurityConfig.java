@@ -7,6 +7,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Configuração de segurança da aplicação.
+ */
 @Configuration
 public class SecurityConfig {
 

@@ -3,6 +3,7 @@ package br.com.emendes.newsapi.controller;
 import br.com.emendes.newsapi.dto.request.AuthenticationRequest;
 import br.com.emendes.newsapi.dto.response.AuthenticationResponse;
 import br.com.emendes.newsapi.service.AuthenticationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,7 @@ public class AuthenticationController {
    * Método responsável por POST /api/auth.
    */
   @PostMapping
-  public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
+  public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid AuthenticationRequest authenticationRequest) {
     AuthenticationResponse authenticationResponse = authenticationService.authenticate(authenticationRequest);
 
     return ResponseEntity.ok(authenticationResponse);
