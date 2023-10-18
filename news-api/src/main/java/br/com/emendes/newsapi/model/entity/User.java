@@ -36,7 +36,7 @@ public class User implements UserDetails {
   private boolean enabled;
   @Column(nullable = false)
   private LocalDateTime createdAt;
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
       name = "t_user_authorities",
       joinColumns = {@JoinColumn(name = "user_id")},

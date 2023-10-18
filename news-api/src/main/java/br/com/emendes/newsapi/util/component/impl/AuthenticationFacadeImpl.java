@@ -19,7 +19,7 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
   public User getCurrentUser() {
     Optional<Authentication> optionalAuthentication = getAuthentication();
 
-    if (optionalAuthentication.isEmpty()) {
+    if (optionalAuthentication.isEmpty() || !optionalAuthentication.get().isAuthenticated()) {
       throw new NoUserAuthenticatedException("No user authenticated");
     }
 
