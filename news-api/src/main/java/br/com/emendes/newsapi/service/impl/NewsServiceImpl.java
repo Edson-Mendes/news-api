@@ -9,6 +9,8 @@ import br.com.emendes.newsapi.service.NewsService;
 import br.com.emendes.newsapi.util.component.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -34,7 +36,16 @@ public class NewsServiceImpl implements NewsService {
 
     news = newsRepository.save(news);
 
+    log.info("news with id: {} registered successful", news.getId());
     return newsMapper.toNewsSummaryResponse(news);
+  }
+
+  @Override
+  public Page<NewsSummaryResponse> fetch(Pageable pageable) {
+    log.info("fetching page: {}, size {} of news", pageable.getPageNumber(), pageable.getPageSize());
+    Page<News> newsPage = newsRepository.findAll(pageable);
+
+    return newsPage.map(newsMapper::toNewsSummaryResponse);
   }
 
 }
