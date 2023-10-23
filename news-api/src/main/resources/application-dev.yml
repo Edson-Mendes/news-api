@@ -15,6 +15,13 @@ spring:
       hibernate:
         format_sql: true
 
+  # rabbitmq properties
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: 1234
+
 # App properties
 newsapi:
   jwt:
