@@ -6,6 +6,7 @@ import br.com.emendes.newsapi.exception.UserCreationException;
 import br.com.emendes.newsapi.mapper.UserMapper;
 import br.com.emendes.newsapi.model.entity.User;
 import br.com.emendes.newsapi.repository.UserRepository;
+import br.com.emendes.newsapi.service.NotificationSenderService;
 import br.com.emendes.newsapi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,7 @@ public class UserServiceImpl implements UserService {
   private final UserMapper userMapper;
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
+  private final NotificationSenderService notificationSenderService;
 
   @Override
   public UserSummaryResponse register(CreateUserRequest userRequest) {
@@ -48,6 +50,8 @@ public class UserServiceImpl implements UserService {
       log.info("User saved successfully with id : {}", user.getId());
 
       // TODO: Enviar email de registro de conta para o email informado.
+      notificationSenderService.send(String.format("User saved successfully with id : %d", user.getId()));
+
       return userMapper.toUserSummaryResponse(user);
     } catch (DataIntegrityViolationException exception) {
       log.info("Data Integrity Violation, message : {}", exception.getMessage());
