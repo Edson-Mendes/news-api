@@ -46,11 +46,13 @@ public class UserServiceImpl implements UserService {
 
 
     try {
-      userRepository.save(user);
+//      userRepository.save(user);
+      user.setId(10101010L);
       log.info("User saved successfully with id : {}", user.getId());
 
       // TODO: Enviar email de registro de conta para o email informado.
-      notificationSenderService.send(String.format("User saved successfully with id : %d", user.getId()));
+      String message = String.format("User saved successfully with id: %d and email: %s", user.getId(), user.getEmail());
+      notificationSenderService.send(message);
 
       return userMapper.toUserSummaryResponse(user);
     } catch (DataIntegrityViolationException exception) {

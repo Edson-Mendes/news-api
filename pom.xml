@@ -18,6 +18,7 @@
 
     <modules>
         <module>news-api</module>
+        <module>notification</module>
     </modules>
 
     <properties>
