@@ -1,6 +1,5 @@
 package br.com.emendes.newsapi.service.impl;
 
-import br.com.emendes.newsapi.dto.SendNotificationDTO;
 import br.com.emendes.newsapi.dto.request.CreateUserRequest;
 import br.com.emendes.newsapi.dto.response.UserSummaryResponse;
 import br.com.emendes.newsapi.exception.UserCreationException;
@@ -9,6 +8,7 @@ import br.com.emendes.newsapi.model.entity.User;
 import br.com.emendes.newsapi.repository.UserRepository;
 import br.com.emendes.newsapi.service.NotificationSenderService;
 import br.com.emendes.newsapi.service.UserService;
+import br.com.emendes.newsapi.util.component.NotificationGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -32,38 +32,40 @@ public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final NotificationSenderService notificationSenderService;
+  private final NotificationGenerator notificationGenerator;
 
-  // TODO: Refatorar esse método.
   @Override
   public UserSummaryResponse register(CreateUserRequest userRequest) {
     if (!isPasswordsMatch(userRequest.password(), userRequest.confirmPassword())) {
       throw new UserCreationException("password and confirmPassword do not match");
     }
     User user = userMapper.toUser(userRequest);
-
-    user.setCreatedAt(LocalDateTime.now());
-    user.setEnabled(true);
-    user.addAuthority(USER_AUTHORITY);
-    user.setPassword(passwordEncoder.encode(userRequest.password()));
+    initializeData(user);
 
     try {
 //      userRepository.save(user);
-      user.setId(10101010L);
+      user.setId(10101010L); // FIXME: id setado apenas para não precisar persistir muitos usuários.
       log.info("User saved successfully with id : {}", user.getId());
 
-      String message = String.format("User saved successfully with id: %d and email: %s", user.getId(), user.getEmail());
-
-      String contentTemplate = """
-          User registered for this email: %s
-          """;
-      SendNotificationDTO sendNotificationDTO = new SendNotificationDTO(user.getEmail(), contentTemplate.formatted(user.getEmail()));
-      notificationSenderService.send(sendNotificationDTO);
+      notificationSenderService.send(notificationGenerator.generateConfirmationNotification(user));
 
       return userMapper.toUserSummaryResponse(user);
     } catch (DataIntegrityViolationException exception) {
       log.info("Data Integrity Violation, message : {}", exception.getMessage());
       throw new UserCreationException(String.format("E-mail {%s} is already in use", user.getEmail()));
     }
+  }
+
+  /**
+   * Adiciona dados do usuário (createdAt, enabled, authorities, password).
+   *
+   * @param user objeto que terá os dados inicializados.
+   */
+  private void initializeData(User user) {
+    user.setCreatedAt(LocalDateTime.now());
+    user.setEnabled(true);
+    user.addAuthority(USER_AUTHORITY);
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
   }
 
   /**

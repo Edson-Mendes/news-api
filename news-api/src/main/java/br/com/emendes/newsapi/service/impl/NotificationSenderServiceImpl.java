@@ -1,6 +1,6 @@
 package br.com.emendes.newsapi.service.impl;
 
-import br.com.emendes.newsapi.dto.SendNotificationDTO;
+import br.com.emendes.newsapi.dto.ConfirmationNotificationDTO;
 import br.com.emendes.newsapi.service.NotificationSenderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +18,8 @@ public class NotificationSenderServiceImpl implements NotificationSenderService 
   private final RabbitTemplate rabbitTemplate;
 
   @Override
-  public void send(SendNotificationDTO sendNotificationDTO) {
-    rabbitTemplate.convertAndSend("notification.ex", "notification.route", sendNotificationDTO);
+  public void send(ConfirmationNotificationDTO confirmationNotificationDTO) {
+    rabbitTemplate.convertAndSend("notification.ex", "notification.route", confirmationNotificationDTO);
 
     log.info("notification has been sent");
   }

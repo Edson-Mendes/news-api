@@ -3,7 +3,7 @@ package br.com.emendes.newsapi.dto;
 /**
  * Record DTO sobre notificação.
  */
-public record SendNotificationDTO(
+public record ConfirmationNotificationDTO(
     String email,
     String content
 ) {
