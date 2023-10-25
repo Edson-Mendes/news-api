@@ -1,5 +1,6 @@
 package br.com.emendes.newsapi.service.impl;
 
+import br.com.emendes.newsapi.dto.SendNotificationDTO;
 import br.com.emendes.newsapi.dto.request.CreateUserRequest;
 import br.com.emendes.newsapi.dto.response.UserSummaryResponse;
 import br.com.emendes.newsapi.exception.UserCreationException;
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
   private final PasswordEncoder passwordEncoder;
   private final NotificationSenderService notificationSenderService;
 
+  // TODO: Refatorar esse método.
   @Override
   public UserSummaryResponse register(CreateUserRequest userRequest) {
     if (!isPasswordsMatch(userRequest.password(), userRequest.confirmPassword())) {
@@ -44,15 +46,18 @@ public class UserServiceImpl implements UserService {
     user.addAuthority(USER_AUTHORITY);
     user.setPassword(passwordEncoder.encode(userRequest.password()));
 
-
     try {
 //      userRepository.save(user);
       user.setId(10101010L);
       log.info("User saved successfully with id : {}", user.getId());
 
-      // TODO: Enviar email de registro de conta para o email informado.
       String message = String.format("User saved successfully with id: %d and email: %s", user.getId(), user.getEmail());
-      notificationSenderService.send(message);
+
+      String contentTemplate = """
+          User registered for this email: %s
+          """;
+      SendNotificationDTO sendNotificationDTO = new SendNotificationDTO(user.getEmail(), contentTemplate.formatted(user.getEmail()));
+      notificationSenderService.send(sendNotificationDTO);
 
       return userMapper.toUserSummaryResponse(user);
     } catch (DataIntegrityViolationException exception) {
