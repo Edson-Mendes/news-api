@@ -1,7 +1,5 @@
 package br.com.emendes.notification.config.beans;
 
-import org.springframework.amqp.core.Queue;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -9,10 +7,5 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class AMQPBeans {
-
-  @Bean
-  public Queue queue() {
-    return new Queue("notification");
-  }
 
 }

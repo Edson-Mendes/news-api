@@ -18,7 +18,7 @@ public class NotificationSenderServiceImpl implements NotificationSenderService 
 
   @Override
   public void send(String message) {
-    rabbitTemplate.convertAndSend("notification", message);
+    rabbitTemplate.convertAndSend("notification.ex", "notification.route", message);
 
     log.info("notification has been sent");
   }
