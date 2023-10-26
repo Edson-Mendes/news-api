@@ -4,8 +4,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;
 
-import java.net.URI;
-
 /**
  * Record DTO sobre notificação.
  */
@@ -16,6 +14,6 @@ public record ConfirmationNotificationDTO(
     @NotBlank(message = "content must not be blank")
     String content,
     @URL(message = "confirmationURI must be a well formed URL")
-    URI confirmationURI
+    String confirmationURI
 ) {
 }
