@@ -7,6 +7,9 @@ import lombok.Getter;
 
 import java.net.URI;
 
+/**
+ * Classe para representar uma notificação.
+ */
 @AllArgsConstructor
 @Getter
 @Builder
@@ -14,6 +17,7 @@ import java.net.URI;
 public class Notification {
 
   private String address;
+  private String title;
   private String content;
   private URI uri;
 

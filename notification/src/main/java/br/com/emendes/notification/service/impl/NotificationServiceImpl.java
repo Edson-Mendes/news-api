@@ -1,6 +1,8 @@
 package br.com.emendes.notification.service.impl;
 
 import br.com.emendes.notification.dto.ConfirmationNotificationDTO;
+import br.com.emendes.notification.mapper.NotificationMapper;
+import br.com.emendes.notification.model.Notification;
 import br.com.emendes.notification.sender.NotificationSender;
 import br.com.emendes.notification.service.NotificationService;
 import jakarta.validation.ConstraintViolation;
@@ -22,6 +24,7 @@ public class NotificationServiceImpl implements NotificationService {
 
   private final Validator validator;
   private final Set<NotificationSender> senders;
+  private final NotificationMapper notificationMapper;
 
   @Override
   public void sendConfirmation(ConfirmationNotificationDTO confirmationNotificationDTO) {
@@ -33,10 +36,10 @@ public class NotificationServiceImpl implements NotificationService {
       return;
     }
 
-    // TODO: Implementar um mapper para converter ConfirmationNotificationDTO para Notification.
+    Notification notification = notificationMapper.toNotification(confirmationNotificationDTO);
 
     for (NotificationSender sender : senders) {
-//      sender.send(notification);
+      sender.send(notification);
     }
   }
 
