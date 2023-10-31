@@ -8,15 +8,16 @@ import lombok.Getter;
 import java.net.URI;
 
 /**
- * Classe para representar uma notificação.
+ * Classe que representa a mensagem de uma notificação.
  */
 @AllArgsConstructor
 @Getter
 @Builder
 @EqualsAndHashCode
-public class Notification {
+public class Message {
 
-  private Contact contact;
-  private Message message;
+  private String title;
+  private String content;
+  private URI uri;
 
 }

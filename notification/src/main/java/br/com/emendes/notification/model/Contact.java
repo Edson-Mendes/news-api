@@ -5,18 +5,16 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import java.net.URI;
-
 /**
- * Classe para representar uma notificação.
+ * Classe que representa um Contato.
  */
 @AllArgsConstructor
 @Getter
 @Builder
 @EqualsAndHashCode
-public class Notification {
+public class Contact {
 
-  private Contact contact;
-  private Message message;
+  private String email;
+  private String phone;
 
 }
