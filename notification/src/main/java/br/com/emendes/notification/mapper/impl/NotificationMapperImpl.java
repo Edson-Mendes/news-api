@@ -3,6 +3,7 @@ package br.com.emendes.notification.mapper.impl;
 import br.com.emendes.notification.dto.ConfirmationNotificationDTO;
 import br.com.emendes.notification.mapper.NotificationMapper;
 import br.com.emendes.notification.model.Notification;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.net.URI;
@@ -10,6 +11,7 @@ import java.net.URI;
 /**
  * Implementação de {@link NotificationMapper}.
  */
+@Component
 public class NotificationMapperImpl implements NotificationMapper {
 
   @Override
