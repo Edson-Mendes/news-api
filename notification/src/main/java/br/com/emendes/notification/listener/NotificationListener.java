@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import static br.com.emendes.notification.config.constant.AMQPConstant.NOTIFICATION_QUEUE_NAME;
 
 /**
- * Classe responsável por ouvir a queue 'notifiation'.
+ * Classe responsável por lidar com as mensagens da queue 'notification'.
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -21,9 +21,10 @@ public class NotificationListener {
 
   @RabbitListener(queues = {NOTIFICATION_QUEUE_NAME})
   public void receiveNotification(ConfirmationNotificationDTO confirmationNotificationDTO) {
-    log.info("EMAIL ::: {}", confirmationNotificationDTO.addresseeEmail());
-    log.info("CONTENT ::: {}", confirmationNotificationDTO.content());
-    log.info("URI ::: {}", confirmationNotificationDTO.confirmationURI());
+    log.info("EMAIL ::: {}", confirmationNotificationDTO.contact().email());
+    log.info("TITLE ::: {}", confirmationNotificationDTO.message().title());
+    log.info("CONTENT ::: {}", confirmationNotificationDTO.message().content());
+    log.info("URI ::: {}", confirmationNotificationDTO.message().confirmationURL());
 
     notificationService.sendConfirmation(confirmationNotificationDTO);
   }
