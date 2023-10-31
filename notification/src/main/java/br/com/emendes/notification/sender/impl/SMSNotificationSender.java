@@ -6,11 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
- * Implementação de {@link NotificationSender} para envio de notificação via E-mail.
+ * Implementação de {@link NotificationSender} para envio de notificação via SMS.
  */
 @Slf4j
 @Component
-public class EmailNotificationSender implements NotificationSender {
+public class SMSNotificationSender implements NotificationSender {
 
   @Override
   public void send(Notification notification) {
