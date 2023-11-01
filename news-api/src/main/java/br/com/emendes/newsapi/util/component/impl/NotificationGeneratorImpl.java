@@ -1,6 +1,8 @@
 package br.com.emendes.newsapi.util.component.impl;
 
 import br.com.emendes.newsapi.dto.ConfirmationNotificationDTO;
+import br.com.emendes.newsapi.dto.ContactDTO;
+import br.com.emendes.newsapi.dto.MessageDTO;
 import br.com.emendes.newsapi.model.entity.User;
 import br.com.emendes.newsapi.service.JwtService;
 import br.com.emendes.newsapi.util.component.NotificationGenerator;
@@ -25,12 +27,14 @@ public class NotificationGeneratorImpl implements NotificationGenerator {
 
     String uriTemplate = "http://localhost:8080/api/users/%s?token=%s";
     String token = jwtService.generateToken(user);
-    URI uri = URI.create(uriTemplate.formatted(user.getId(), token));
+    String uri = uriTemplate.formatted(user.getId(), token);
+
+    ContactDTO contact = new ContactDTO(user.getEmail(), "99 99999-9999");
+    MessageDTO message = new MessageDTO("Confirm your registration", "Lorem ipsum dolor sit amet", uri);
 
     return ConfirmationNotificationDTO.builder()
-        .addresseeEmail(user.getEmail())
-        .content("Please click no link to confirm your account")
-        .confirmationURI(uri)
+        .contact(contact)
+        .message(message)
         .build();
   }
 

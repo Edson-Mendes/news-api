@@ -15,8 +15,8 @@ public class SMSNotificationSender implements NotificationSender {
   @Override
   public void send(Notification notification) {
     // TODO: Apenas uma implementação para executar a aplicação.
-    log.info("Sending email para: {}", notification.getContact().getEmail());
-    log.info("email sent!");
+    log.info("Sending SMS para: {}", notification.getContact().getPhone());
+    log.info("SMS sent!");
   }
 
 }
