@@ -48,7 +48,7 @@ public class SecurityBeans {
     return username -> {
       log.info("Searching for user with email : {}", username);
 
-      return userRepository.findByEmailAndEnabledTrue(username)
+      return userRepository.findByEmail(username)
           .orElseThrow(() -> {
             String message = String.format("User %s not found", username);
 
