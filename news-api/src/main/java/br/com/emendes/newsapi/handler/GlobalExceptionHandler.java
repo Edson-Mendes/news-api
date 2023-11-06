@@ -5,6 +5,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+  public static final URI URI = java.net.URI.create("https://github.com/Edson-Mendes/news-api/blob/main/README.md");
+
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
       MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
@@ -35,14 +39,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     problemDetail.setDetail("Some fields are invalids");
     problemDetail.setProperty("fields", fields);
     problemDetail.setProperty("messages", messages);
-    problemDetail.setType(URI.create("https://github.com/Edson-Mendes/news-api/blob/main/README.md"));
+    problemDetail.setType(URI);
 
     return ResponseEntity.badRequest().body(problemDetail);
-  }
-
-  @Override
-  protected ResponseEntity<Object> createResponseEntity(Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
-    return super.createResponseEntity(body, headers, statusCode, request);
   }
 
   @ExceptionHandler(UserCreationException.class)
@@ -50,9 +49,45 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ProblemDetail problemDetail = ProblemDetail
         .forStatusAndDetail(HttpStatusCode.valueOf(400), exception.getMessage());
     problemDetail.setTitle("Bad request");
-    problemDetail.setType(URI.create("https://github.com/Edson-Mendes/news-api/blob/main/README.md"));
+    problemDetail.setType(URI);
 
     return ResponseEntity.badRequest().body(problemDetail);
+  }
+
+  @ExceptionHandler(BadCredentialsException.class)
+  public ResponseEntity<ProblemDetail> handleBadCredentials(BadCredentialsException exception, WebRequest request) {
+    ProblemDetail problemDetail = createProblemDetail(
+        exception, HttpStatusCode.valueOf(400),
+        "invalid e-mail or password", null, null, request);
+
+    problemDetail.setTitle(exception.getMessage());
+    problemDetail.setType(URI);
+
+    return ResponseEntity.internalServerError().body(problemDetail);
+  }
+
+  @ExceptionHandler(LockedException.class)
+  public ResponseEntity<ProblemDetail> handleLocked(LockedException exception, WebRequest request) {
+    ProblemDetail problemDetail = createProblemDetail(
+        exception, HttpStatusCode.valueOf(400),
+        "account non activated, please check your email to activate your account",
+        null, null, request);
+
+    problemDetail.setTitle(exception.getMessage());
+    problemDetail.setType(URI);
+
+    return ResponseEntity.internalServerError().body(problemDetail);
+  }
+
+  @ExceptionHandler(RuntimeException.class)
+  public ResponseEntity<ProblemDetail> handleRuntimeException(RuntimeException exception, WebRequest request) {
+    String message = "%s, Please read the logs for more info.".formatted(exception.getMessage());
+    ProblemDetail problemDetail = createProblemDetail(exception, HttpStatusCode.valueOf(500), message, null, null, request);
+
+    problemDetail.setTitle("Something went wrong");
+    problemDetail.setType(URI);
+
+    return ResponseEntity.internalServerError().body(problemDetail);
   }
 
 }
