@@ -46,7 +46,6 @@ public class UserServiceImpl implements UserService {
 //      userRepository.save(user);
       user.setId(10101010L); // FIXME: id setado apenas para não precisar persistir muitos usuários.
       log.info("User saved successfully with id : {}", user.getId());
-
       notificationSenderService.send(notificationGenerator.generateConfirmationNotification(user));
 
       return userMapper.toUserSummaryResponse(user);

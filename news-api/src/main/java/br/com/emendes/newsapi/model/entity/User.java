@@ -15,6 +15,7 @@ import java.util.HashSet;
 @Entity
 @Table(name = "t_user")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -30,6 +31,8 @@ public class User implements UserDetails {
   private String name;
   @Column(length = 320, nullable = false, unique = true)
   private String email;
+  @Column(length = 25, nullable = false)
+  private String phone;
   @Column(nullable = false)
   private String password;
   @Column(nullable = false)

@@ -23,6 +23,7 @@ public class UserMapperImpl implements UserMapper {
     return User.builder()
         .name(userRequest.name())
         .email(userRequest.email())
+        .phone(userRequest.phone())
         .password(userRequest.password())
         .build();
   }
