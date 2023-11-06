@@ -39,6 +39,7 @@ public class UserMapperImpl implements UserMapper {
         .id(user.getId())
         .name(user.getName())
         .email(user.getEmail())
+        .enabled(user.isEnabled())
         .build();
   }
 

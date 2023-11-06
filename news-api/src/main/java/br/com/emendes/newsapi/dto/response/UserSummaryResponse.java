@@ -9,6 +9,7 @@ import lombok.Builder;
 public record UserSummaryResponse(
     Long id,
     String name,
-    String email
+    String email,
+    boolean enabled
 ) {
 }

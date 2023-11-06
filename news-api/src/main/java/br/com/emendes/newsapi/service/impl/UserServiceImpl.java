@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
    */
   private void initializeData(User user) {
     user.setCreatedAt(LocalDateTime.now());
-    user.setEnabled(true);
+    user.setEnabled(false);
     user.addAuthority(USER_AUTHORITY);
     user.setPassword(passwordEncoder.encode(user.getPassword()));
   }
