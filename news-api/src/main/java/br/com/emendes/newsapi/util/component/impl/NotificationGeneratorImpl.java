@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import java.net.URI;
-
 /**
  * Implementação de {@link NotificationGenerator}.
  */
@@ -29,7 +27,7 @@ public class NotificationGeneratorImpl implements NotificationGenerator {
     String token = jwtService.generateToken(user);
     String uri = uriTemplate.formatted(user.getId(), token);
 
-    ContactDTO contact = new ContactDTO(user.getEmail(), "99 99999-9999");
+    ContactDTO contact = new ContactDTO(user.getEmail(), user.getPhone());
     MessageDTO message = new MessageDTO("Confirm your registration", "Lorem ipsum dolor sit amet", uri);
 
     return ConfirmationNotificationDTO.builder()

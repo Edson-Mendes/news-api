@@ -40,6 +40,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return ResponseEntity.badRequest().body(problemDetail);
   }
 
+  @Override
+  protected ResponseEntity<Object> createResponseEntity(Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+    return super.createResponseEntity(body, headers, statusCode, request);
+  }
+
   @ExceptionHandler(UserCreationException.class)
   public ResponseEntity<ProblemDetail> handleUserCreation(UserCreationException exception) {
     ProblemDetail problemDetail = ProblemDetail
