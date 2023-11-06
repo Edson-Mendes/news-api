@@ -26,9 +26,9 @@ public class AccountServiceImpl implements AccountService {
   private static final String ACCOUNT_EXCEPTION_MESSAGE_TEMPLATE = "User with email: %s not found";
 
   @Override
-  public void enableAccount(String token) {
+  public void enableAccount(long id, String token) {
     Assert.notNull(token, "token must not be null");
-    if (jwtService.isTokenValid(token)) {
+    if (!jwtService.isTokenValid(token)) {
       throw new InvalidTokenException("invalid token");
     }
 

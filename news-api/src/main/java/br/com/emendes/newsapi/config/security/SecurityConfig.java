@@ -23,6 +23,7 @@ public class SecurityConfig {
 
   private final Filter jwtAuthenticationFilter;
   private static final String[] AUTH_WHITELIST = {"/api/users", "/api/auth"};
+  private static final String[] PATCH_WHITELIST = {"/api/users/*"};
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -32,6 +33,7 @@ public class SecurityConfig {
     http
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(HttpMethod.POST, AUTH_WHITELIST).permitAll()
+            .requestMatchers(HttpMethod.PATCH, PATCH_WHITELIST).permitAll()
             .anyRequest().authenticated());
 
     http

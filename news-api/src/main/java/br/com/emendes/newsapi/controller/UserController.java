@@ -2,14 +2,12 @@ package br.com.emendes.newsapi.controller;
 
 import br.com.emendes.newsapi.dto.request.CreateUserRequest;
 import br.com.emendes.newsapi.dto.response.UserSummaryResponse;
+import br.com.emendes.newsapi.service.AccountService;
 import br.com.emendes.newsapi.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -23,6 +21,7 @@ import java.net.URI;
 public class UserController {
 
   private final UserService userService;
+  private final AccountService accountService;
 
   /**
    * Método responsável por POST /api/users.
@@ -35,6 +34,16 @@ public class UserController {
     URI location = uriBuilder.path("/api/users/{id}").build(userSummaryResponse.id());
 
     return ResponseEntity.created(location).body(userSummaryResponse);
+  }
+
+  /**
+   * Método responsável por PATCH /api/users/{id}.
+   */
+  @PatchMapping("/{id}")
+  public ResponseEntity<Void> activate(@PathVariable(name = "id") long id, @RequestParam(name = "token") String token) {
+    accountService.enableAccount(id, token);
+
+    return ResponseEntity.noContent().build();
   }
 
 }

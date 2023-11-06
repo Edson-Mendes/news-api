@@ -14,6 +14,6 @@ public interface AccountService {
    * @throws InvalidTokenException caso o token informado seja inválido.
    * @throws IllegalArgumentException caso o token seja null.
    */
-  void enableAccount(String token);
+  void enableAccount(long id, String token);
 
 }
