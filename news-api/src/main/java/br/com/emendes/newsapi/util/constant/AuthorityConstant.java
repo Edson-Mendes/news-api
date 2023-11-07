@@ -15,6 +15,11 @@ public final class AuthorityConstant {
       .name("USER")
       .build();
 
+  public static final Authority ADMIN_AUTHORITY = Authority.builder()
+      .id(2)
+      .name("ADMIN")
+      .build();
+
   private AuthorityConstant() {
   }
 

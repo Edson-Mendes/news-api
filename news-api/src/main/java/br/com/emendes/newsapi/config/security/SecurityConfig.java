@@ -14,6 +14,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static br.com.emendes.newsapi.util.constant.AuthorityConstant.ADMIN_AUTHORITY;
+
 /**
  * Configuração de segurança da aplicação.
  */
@@ -33,8 +35,8 @@ public class SecurityConfig {
     http
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(HttpMethod.POST, AUTH_WHITELIST).permitAll()
-            .requestMatchers(HttpMethod.GET, "/api/users").permitAll()
             .requestMatchers(HttpMethod.PATCH, PATCH_WHITELIST).permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/users").hasAuthority(ADMIN_AUTHORITY.getAuthority())
             .anyRequest().authenticated());
 
     http
