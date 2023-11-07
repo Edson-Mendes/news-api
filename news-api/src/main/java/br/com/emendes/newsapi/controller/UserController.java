@@ -6,6 +6,9 @@ import br.com.emendes.newsapi.service.AccountService;
 import br.com.emendes.newsapi.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -34,6 +37,14 @@ public class UserController {
     URI location = uriBuilder.path("/api/users/{id}").build(userSummaryResponse.id());
 
     return ResponseEntity.created(location).body(userSummaryResponse);
+  }
+
+  /**
+   * Método responsável por GET /api/users.
+   */
+  @GetMapping
+  public ResponseEntity<Page<UserSummaryResponse>> fetch(@PageableDefault Pageable pageable) {
+    return ResponseEntity.ok(userService.fetch(pageable));
   }
 
   /**

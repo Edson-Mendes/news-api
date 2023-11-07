@@ -12,6 +12,8 @@ import br.com.emendes.newsapi.util.component.NotificationGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +55,15 @@ public class UserServiceImpl implements UserService {
       log.info("Data Integrity Violation, message : {}", exception.getMessage());
       throw new UserCreationException(String.format("E-mail {%s} is already in use", user.getEmail()));
     }
+  }
+
+  @Override
+  public Page<UserSummaryResponse> fetch(Pageable pageable) {
+    log.info("Search for page {} with size {} of users", pageable.getPageNumber(), pageable.getPageSize());
+
+    Page<User> userPage = userRepository.findAll(pageable);
+
+    return userPage.map(userMapper::toUserSummaryResponse);
   }
 
   /**
