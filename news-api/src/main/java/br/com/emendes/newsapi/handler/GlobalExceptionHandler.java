@@ -76,7 +76,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     problemDetail.setTitle(exception.getMessage());
     problemDetail.setType(URI);
 
-    return ResponseEntity.internalServerError().body(problemDetail);
+    return ResponseEntity.badRequest().body(problemDetail);
   }
 
   @ExceptionHandler(RuntimeException.class)
