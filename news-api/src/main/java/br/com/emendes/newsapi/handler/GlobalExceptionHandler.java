@@ -1,6 +1,7 @@
 package br.com.emendes.newsapi.handler;
 
 import br.com.emendes.newsapi.exception.UserCreationException;
+import br.com.emendes.newsapi.exception.UserNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
@@ -77,6 +78,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     problemDetail.setType(URI);
 
     return ResponseEntity.badRequest().body(problemDetail);
+  }
+
+  @ExceptionHandler(UserNotFoundException.class)
+  public ResponseEntity<ProblemDetail> handleUserNotFound(UserNotFoundException exception, WebRequest request) {
+    ProblemDetail problemDetail = createProblemDetail(exception, HttpStatusCode.valueOf(404),
+        exception.getMessage(), null, null, request);
+
+    problemDetail.setTitle("Resource not found");
+    problemDetail.setType(URI);
+
+    return ResponseEntity.status(404).body(problemDetail);
   }
 
   @ExceptionHandler(RuntimeException.class)
