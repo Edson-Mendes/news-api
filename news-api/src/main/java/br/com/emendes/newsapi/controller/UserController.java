@@ -1,6 +1,7 @@
 package br.com.emendes.newsapi.controller;
 
 import br.com.emendes.newsapi.dto.request.CreateUserRequest;
+import br.com.emendes.newsapi.dto.response.UserDetailsResponse;
 import br.com.emendes.newsapi.dto.response.UserSummaryResponse;
 import br.com.emendes.newsapi.service.AccountService;
 import br.com.emendes.newsapi.service.UserService;
@@ -45,6 +46,14 @@ public class UserController {
   @GetMapping
   public ResponseEntity<Page<UserSummaryResponse>> fetch(@PageableDefault Pageable pageable) {
     return ResponseEntity.ok(userService.fetch(pageable));
+  }
+
+  /**
+   * Método responsável por GET /api/users/{id}.
+   */
+  @GetMapping("/{id}")
+  public ResponseEntity<UserDetailsResponse> findById(@PathVariable(name = "id") Long id) {
+    return ResponseEntity.ok(userService.findById(id));
   }
 
   /**
