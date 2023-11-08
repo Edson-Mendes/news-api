@@ -1,8 +1,10 @@
 package br.com.emendes.newsapi.service.impl;
 
 import br.com.emendes.newsapi.dto.request.CreateUserRequest;
+import br.com.emendes.newsapi.dto.response.UserDetailsResponse;
 import br.com.emendes.newsapi.dto.response.UserSummaryResponse;
 import br.com.emendes.newsapi.exception.UserCreationException;
+import br.com.emendes.newsapi.exception.UserNotFoundException;
 import br.com.emendes.newsapi.mapper.UserMapper;
 import br.com.emendes.newsapi.model.entity.User;
 import br.com.emendes.newsapi.repository.UserRepository;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -46,7 +49,7 @@ public class UserServiceImpl implements UserService {
 
     try {
       userRepository.save(user);
-//      user.setId(10101010L); // FIXME: id setado apenas para não precisar persistir muitos usuários.
+
       log.info("User saved successfully with id : {}", user.getId());
       notificationSenderService.send(notificationGenerator.generateConfirmationNotification(user));
 
@@ -64,6 +67,16 @@ public class UserServiceImpl implements UserService {
     Page<User> userPage = userRepository.findAll(pageable);
 
     return userPage.map(userMapper::toUserSummaryResponse);
+  }
+
+  @Override
+  public UserDetailsResponse findById(Long id) {
+    Assert.notNull(id, "id must not be null");
+
+    User user = userRepository.findById(id)
+        .orElseThrow(() -> new UserNotFoundException("user not found for id %d".formatted(id)));
+
+    return userMapper.toUserDetailsResponse(user);
   }
 
   /**

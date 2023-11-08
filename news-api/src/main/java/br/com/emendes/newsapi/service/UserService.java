@@ -1,7 +1,9 @@
 package br.com.emendes.newsapi.service;
 
 import br.com.emendes.newsapi.dto.request.CreateUserRequest;
+import br.com.emendes.newsapi.dto.response.UserDetailsResponse;
 import br.com.emendes.newsapi.dto.response.UserSummaryResponse;
+import br.com.emendes.newsapi.exception.UserNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -25,5 +27,14 @@ public interface UserService {
    * @return {@code Page<UserSummaryResponse>}
    */
   Page<UserSummaryResponse> fetch(Pageable pageable);
+
+  /**
+   * Buscar usuário por id.
+   *
+   * @param id identificador do usuário.
+   * @return Objeto UserDetailsResponse com as informações detalhadas do usuário encontrado.
+   * @throws UserNotFoundException caso o id fornecido não corresponda a nenhum usuário.
+   */
+  UserDetailsResponse findById(Long id);
 
 }

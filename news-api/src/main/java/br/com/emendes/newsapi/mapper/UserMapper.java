@@ -1,6 +1,7 @@
 package br.com.emendes.newsapi.mapper;
 
 import br.com.emendes.newsapi.dto.request.CreateUserRequest;
+import br.com.emendes.newsapi.dto.response.UserDetailsResponse;
 import br.com.emendes.newsapi.dto.response.UserSummaryResponse;
 import br.com.emendes.newsapi.model.entity.User;
 
@@ -24,4 +25,12 @@ public interface UserMapper {
    * @return UserSummaryResponse contendo um resumo das informações do usuário.
    */
   UserSummaryResponse toUserSummaryResponse(User user);
+
+  /**
+   * Mapeia a entidade User para o DTO UserDetailsResponse.
+   *
+   * @param user objeto a ser mapeado.
+   * @return Objeto UserDetailsResponse contendo as informações que estavam em User.
+   */
+  UserDetailsResponse toUserDetailsResponse(User user);
 }

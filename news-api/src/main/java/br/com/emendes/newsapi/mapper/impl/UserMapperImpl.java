@@ -1,6 +1,7 @@
 package br.com.emendes.newsapi.mapper.impl;
 
 import br.com.emendes.newsapi.dto.request.CreateUserRequest;
+import br.com.emendes.newsapi.dto.response.UserDetailsResponse;
 import br.com.emendes.newsapi.dto.response.UserSummaryResponse;
 import br.com.emendes.newsapi.mapper.UserMapper;
 import br.com.emendes.newsapi.model.entity.User;
@@ -40,6 +41,23 @@ public class UserMapperImpl implements UserMapper {
         .name(user.getName())
         .email(user.getEmail())
         .enabled(user.isEnabled())
+        .build();
+  }
+
+  /**
+   * @throws IllegalArgumentException caso userRequest seja null.
+   */
+  @Override
+  public UserDetailsResponse toUserDetailsResponse(User user) {
+    Assert.notNull(user, "user must not be null");
+
+    return UserDetailsResponse.builder()
+        .id(user.getId())
+        .name(user.getName())
+        .email(user.getEmail())
+        .phone(user.getPhone())
+        .enabled(user.isEnabled())
+        .createdAt(user.getCreatedAt())
         .build();
   }
 
