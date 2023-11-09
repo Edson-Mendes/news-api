@@ -3,6 +3,7 @@ package br.com.emendes.newsapi.service.impl;
 import br.com.emendes.newsapi.dto.request.CreateUserRequest;
 import br.com.emendes.newsapi.dto.response.UserDetailsResponse;
 import br.com.emendes.newsapi.dto.response.UserSummaryResponse;
+import br.com.emendes.newsapi.exception.UnauthorizedUserException;
 import br.com.emendes.newsapi.exception.UserCreationException;
 import br.com.emendes.newsapi.exception.UserNotFoundException;
 import br.com.emendes.newsapi.mapper.UserMapper;
@@ -10,6 +11,7 @@ import br.com.emendes.newsapi.model.entity.User;
 import br.com.emendes.newsapi.repository.UserRepository;
 import br.com.emendes.newsapi.service.NotificationSenderService;
 import br.com.emendes.newsapi.service.UserService;
+import br.com.emendes.newsapi.util.component.AuthenticationFacade;
 import br.com.emendes.newsapi.util.component.NotificationGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +40,7 @@ public class UserServiceImpl implements UserService {
   private final PasswordEncoder passwordEncoder;
   private final NotificationSenderService notificationSenderService;
   private final NotificationGenerator notificationGenerator;
+  private final AuthenticationFacade authenticationFacade;
 
   @Override
   public UserSummaryResponse register(CreateUserRequest userRequest) {
@@ -72,8 +75,25 @@ public class UserServiceImpl implements UserService {
     Assert.notNull(id, "id must not be null");
     log.info("Search for user with id {}", id);
 
+    User currentUser = authenticationFacade.getCurrentUser();
+    if (!isAdmin(currentUser) && !currentUser.getId().equals(id)) {
+      throw new UnauthorizedUserException("O usuário atual não tem permissão para realizar está ação");
+    }
+
     return userRepository.findProjectedById(id)
         .orElseThrow(() -> new UserNotFoundException("user not found for id %d".formatted(id)));
+  }
+
+  /**
+   * Verifica se o usuário tem a autoridade de ADMIN.
+   *
+   * @param user objeto que será verificado.
+   * @return true caso o user tenha a autoridade de ADMIN, false caso contrário.
+   */
+  private boolean isAdmin(User user) {
+    return user.getAuthorities()
+        .stream()
+        .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN"));
   }
 
   /**
