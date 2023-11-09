@@ -1,6 +1,9 @@
 package br.com.emendes.newsapi.repository;
 
+import br.com.emendes.newsapi.dto.response.UserSummaryResponse;
 import br.com.emendes.newsapi.model.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
@@ -17,5 +20,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
    * @return {@code Optional<User>} objeto wrapper de User.
    */
   Optional<User> findByEmail(String email);
+
+  /**
+   * Busca paginada de Usuários. Busca apenas os campos que pertencem a {@link UserSummaryResponse}.
+   *
+   * @param pageable objeto contendo os parâmetros de paginação.
+   * @return {@code Page<UserSummaryResponse>} resumo paginado dos usuários.
+   */
+  Page<UserSummaryResponse> findBy(Pageable pageable);
 
 }

@@ -64,14 +64,13 @@ public class UserServiceImpl implements UserService {
   public Page<UserSummaryResponse> fetch(Pageable pageable) {
     log.info("Search for page {} with size {} of users", pageable.getPageNumber(), pageable.getPageSize());
 
-    Page<User> userPage = userRepository.findAll(pageable);
-
-    return userPage.map(userMapper::toUserSummaryResponse);
+    return userRepository.findBy(pageable);
   }
 
   @Override
   public UserDetailsResponse findById(Long id) {
     Assert.notNull(id, "id must not be null");
+    log.info("Search for user with id {}", id);
 
     User user = userRepository.findById(id)
         .orElseThrow(() -> new UserNotFoundException("user not found for id %d".formatted(id)));
