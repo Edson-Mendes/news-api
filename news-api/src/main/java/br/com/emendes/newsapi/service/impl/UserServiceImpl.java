@@ -72,10 +72,8 @@ public class UserServiceImpl implements UserService {
     Assert.notNull(id, "id must not be null");
     log.info("Search for user with id {}", id);
 
-    User user = userRepository.findById(id)
+    return userRepository.findProjectedById(id)
         .orElseThrow(() -> new UserNotFoundException("user not found for id %d".formatted(id)));
-
-    return userMapper.toUserDetailsResponse(user);
   }
 
   /**
