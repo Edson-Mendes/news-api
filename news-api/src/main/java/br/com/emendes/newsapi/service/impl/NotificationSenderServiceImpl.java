@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
+import static br.com.emendes.newsapi.util.NotificationSchedule.NOTIFICATION_STORAGE;
+
 /**
  * Implementação de {@link NotificationSenderService}.
  */
@@ -19,9 +21,14 @@ public class NotificationSenderServiceImpl implements NotificationSenderService 
 
   @Override
   public void send(ConfirmationNotificationDTO confirmationNotificationDTO) {
-    rabbitTemplate.convertAndSend("notification.ex", "notification.route", confirmationNotificationDTO);
-
-    log.info("notification has been sent");
+    try {
+      rabbitTemplate.convertAndSend(
+          "notification.ex", "notification.route", confirmationNotificationDTO);
+      log.info("notification has been sent");
+    } catch (Exception exception) {
+      log.error("Something bad happen ::: {}", exception.getMessage());
+      NOTIFICATION_STORAGE.push(confirmationNotificationDTO);
+    }
   }
 
 }
